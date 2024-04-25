@@ -5,8 +5,7 @@ class SelectDateWidget extends StatefulWidget {
   final DateTime? selectedDate;
 
   const SelectDateWidget(
-      {required this.onDateSelected, this.selectedDate, final Key? key})
-      : super(key: key);
+      {required this.onDateSelected, this.selectedDate, super.key,});
 
   @override
   State<SelectDateWidget> createState() => _SelectDateWidgetState();

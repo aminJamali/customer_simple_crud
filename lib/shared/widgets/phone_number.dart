@@ -7,8 +7,7 @@ class PhoneNumber extends StatefulWidget {
   final void Function(CountryWithPhoneCode country, String phoneNumber)
       onPhoneNumberChanged;
 
-  const PhoneNumber({required this.onPhoneNumberChanged, Key? key})
-      : super(key: key);
+  const PhoneNumber({required this.onPhoneNumberChanged, super.key});
 
   @override
   State<PhoneNumber> createState() => _PhoneNumberState();
@@ -29,7 +28,6 @@ class _PhoneNumberState extends State<PhoneNumber> {
 
   Future<void> getAllSupportedRegionsFromLibPhone() async {
     supportedRegions = await getAllSupportedRegions();
-    print(supportedRegions);
     setState(() {});
   }
 

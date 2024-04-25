@@ -1,12 +1,11 @@
-import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 
 import '../failure/field_is_required_failure.dart';
 
 class PhoneNumberValueObject {
   final String phoneNumber;
-  final CountryWithPhoneCode code;
+  final String countryCode;
 
-  PhoneNumberValueObject(this.phoneNumber, this.code) {
+  PhoneNumberValueObject(this.phoneNumber, this.countryCode) {
     _validate();
   }
 
