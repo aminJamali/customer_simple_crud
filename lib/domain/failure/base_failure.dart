@@ -1,5 +1,7 @@
-abstract class BaseFailure implements Exception {
+import 'package:equatable/equatable.dart';
+
+abstract class BaseFailure extends Equatable implements Exception {
   final String message;
 
-  BaseFailure(this.message);
+  const BaseFailure(this.message);
 }

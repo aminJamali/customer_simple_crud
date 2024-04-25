@@ -5,7 +5,7 @@ class FirstNameValueObject {
 
   FirstNameValueObject(this.firstName) {
     if (firstName.isEmpty) {
-      throw FieldIsRequiredFailure('FirstName is required');
+      throw const FieldIsRequiredFailure('FirstName is required');
     }
   }
 }

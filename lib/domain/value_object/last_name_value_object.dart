@@ -5,7 +5,7 @@ class LastNameValueObject {
 
   LastNameValueObject(this.lastName) {
     if (lastName.isEmpty) {
-      throw FieldIsRequiredFailure('LastName is required');
+      throw const FieldIsRequiredFailure('LastName is required');
     }
   }
 }

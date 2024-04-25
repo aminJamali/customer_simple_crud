@@ -17,10 +17,10 @@ class EmailValueObject {
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
       final RegExp regex = RegExp(pattern);
       if (!regex.hasMatch(value!)) {
-        throw EmailIsNotValidFailure('Email Address is not valid');
+        throw const EmailIsNotValidFailure('Email Address is not valid');
       }
     } else {
-      throw FieldIsRequiredFailure('Email Address is required');
+      throw const FieldIsRequiredFailure('Email Address is required');
     }
   }
 }

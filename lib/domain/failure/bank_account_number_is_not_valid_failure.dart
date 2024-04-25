@@ -1,5 +1,8 @@
 import 'base_failure.dart';
 
 class BankAccountNumberIsNotValidFailure extends BaseFailure {
-  BankAccountNumberIsNotValidFailure(super.message);
+  const BankAccountNumberIsNotValidFailure(super.message);
+
+  @override
+  List<Object?> get props => [];
 }

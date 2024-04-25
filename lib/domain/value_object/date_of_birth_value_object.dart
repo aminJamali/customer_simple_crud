@@ -5,7 +5,7 @@ class DateOfBirthValueObject {
 
   DateOfBirthValueObject(this.dateOfBirth) {
     if (dateOfBirth.isEmpty) {
-      throw FieldIsRequiredFailure('DateOfBirth is required');
+      throw const FieldIsRequiredFailure('DateOfBirth is required');
     }
   }
 }

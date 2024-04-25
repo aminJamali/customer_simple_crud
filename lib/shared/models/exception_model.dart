@@ -1,5 +1,10 @@
-class ExceptionModel implements Exception{
+import 'package:equatable/equatable.dart';
+
+class ExceptionModel extends Equatable implements Exception {
   final String message;
 
-  ExceptionModel({required this.message});
+  const ExceptionModel({required this.message});
+
+  @override
+  List<Object?> get props => [];
 }

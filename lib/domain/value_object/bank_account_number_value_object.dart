@@ -15,10 +15,10 @@ class BankAccountNumberValueObject {
       const String pattern = r'^[0-9]{9,18}$';
       final RegExp regex = RegExp(pattern);
       if (!regex.hasMatch(value)) {
-        throw BankAccountNumberIsNotValidFailure('Bank Account Number is not valid');
+        throw const BankAccountNumberIsNotValidFailure('Bank Account Number is not valid');
       }
     } else {
-      throw FieldIsRequiredFailure('Bank Account Number is required');
+      throw const FieldIsRequiredFailure('Bank Account Number is required');
     }
   }
 }

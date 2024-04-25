@@ -1,5 +1,8 @@
 import 'base_failure.dart';
 
 class EmailIsNotValidFailure extends BaseFailure {
-  EmailIsNotValidFailure(super.message);
+  const EmailIsNotValidFailure(super.message);
+
+  @override
+  List<Object?> get props => [];
 }

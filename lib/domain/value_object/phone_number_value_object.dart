@@ -11,7 +11,7 @@ class PhoneNumberValueObject {
 
   void _validate() {
     if (phoneNumber.isEmpty) {
-      throw FieldIsRequiredFailure('PhoneNumber is required');
+      throw const FieldIsRequiredFailure('PhoneNumber is required');
     }
   }
 }

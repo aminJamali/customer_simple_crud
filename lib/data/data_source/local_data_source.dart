@@ -10,7 +10,7 @@ class LocalDataSource {
   static const String customers = 'customers';
   static const String db = 'CustomerDb';
 
-  static Future<BoxCollection> openOrCreateDb() async {
+   Future<BoxCollection> openOrCreateDb() async {
     final directory = await getApplicationDocumentsDirectory();
 
     return BoxCollection.open(
@@ -58,10 +58,10 @@ class LocalDataSource {
       if (value['firstName'] == firstName &&
           value['lastName'] == lastName &&
           value['dateOfBirth'] == dateOfBirth) {
-        throw ExceptionModel(message: 'Customer is duplicate');
+        throw const ExceptionModel(message: 'Customer is duplicate');
       }
       if (value['email'] == email) {
-        throw ExceptionModel(message: 'Email is duplicate');
+        throw const ExceptionModel(message: 'Email is duplicate');
       }
     });
   }
