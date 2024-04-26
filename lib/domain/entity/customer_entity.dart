@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 import '../value_object/bank_account_number_value_object.dart';
 import '../value_object/date_of_birth_value_object.dart';
 import '../value_object/email_value_object.dart';
@@ -5,7 +7,7 @@ import '../value_object/first_name_value_object.dart';
 import '../value_object/last_name_value_object.dart';
 import '../value_object/phone_number_value_object.dart';
 
-class CustomerEntity {
+class CustomerEntity extends Equatable {
   final BankAccountNumberValueObject bankAccountNumberValueObject;
   final DateOfBirthValueObject dateOfBirthValueObject;
   final EmailValueObject emailValueObject;
@@ -21,4 +23,7 @@ class CustomerEntity {
     required this.firstNameValueObject,
     required this.lastNameValueObject,
   });
+
+  @override
+  List<Object?> get props => [];
 }

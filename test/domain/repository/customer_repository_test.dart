@@ -67,7 +67,65 @@ void main() {
       },
     );
   });
+
+  group('get all customers repository tests', () {
+    test(
+      'should return a valid customer list with one item',
+      () async {
+        when(
+          () => mockAddCustomerDataSource.getAllCustomers(),
+        ).thenAnswer(
+          (_) async => Right(_fakeMap),
+        );
+
+        final result = await customerRepository.getAllCustomers();
+
+        result.fold(
+          (l) => null,
+          (r) => expect(r.length, 1),
+        );
+      },
+    );
+
+    test(
+      'should return exception',
+      () async {
+        when(
+          () => mockAddCustomerDataSource.getAllCustomers(),
+        ).thenAnswer(
+          (_) async => const Left(
+            ExceptionModel(message: 'exception'),
+          ),
+        );
+
+        final result = await customerRepository.getAllCustomers();
+
+        result.fold(
+          (l) => expect(
+            l,
+            const ExceptionModel(message: 'exception'),
+          ),
+          (r) => null,
+        );
+      },
+    );
+  });
 }
+
+final _fakeMap = {
+  '123': {
+    'id': '1',
+    'bankAccountNumber': '123456789',
+    'dateOfBirth': '2024-04-25T10:24:16.642479',
+    'email': 'amin@gmail.com',
+    'phoneNumber': {
+      'phoneNumber': '9014536521',
+      'countryCode': '98',
+    },
+    'firstName': 'amin',
+    'lastName': 'jamali',
+  },
+};
 
 final _addCustomerFakeDto = AddCustomerDto(
   bankAccountNumberValueObject: BankAccountNumberValueObject('123456789'),

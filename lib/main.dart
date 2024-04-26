@@ -6,16 +6,15 @@ import 'package:path_provider/path_provider.dart';
 
 import 'application/config/router/router.dart';
 import 'application/config/theme/app_theme.dart';
-import 'application/injection/customer_injections.dart';
+import 'application/injection/app_injections.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await init();
-  await CustomerInjections.initAddCustomerInjection();
+  await AppInjections.initAppInjections();
   final directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
-
 
   runApp(const MyApp());
 }

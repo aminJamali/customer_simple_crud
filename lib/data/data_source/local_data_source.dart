@@ -10,7 +10,7 @@ class LocalDataSource {
   static const String customers = 'customers';
   static const String db = 'CustomerDb';
 
-   Future<BoxCollection> openOrCreateDb() async {
+  Future<BoxCollection> openOrCreateDb() async {
     final directory = await getApplicationDocumentsDirectory();
 
     return BoxCollection.open(
@@ -24,6 +24,18 @@ class LocalDataSource {
     final collection = await openOrCreateDb();
 
     return collection.openBox(customers);
+  }
+
+  Future<Either<ExceptionModel, Map<String, dynamic>>> getAllCustomers() async {
+    try {
+      final customerBox = await openCustomerBox();
+
+      final customers = await customerBox.getAllValues();
+
+      return Right(customers);
+    } on ExceptionModel catch (e) {
+      return Left(e);
+    }
   }
 
   Future<Either<ExceptionModel, String>> addCustomer(
@@ -41,7 +53,7 @@ class LocalDataSource {
       await customerBox.put(uuid, addCustomerDto.toJson(uuid));
 
       return Right(uuid);
-    }on ExceptionModel catch (e) {
+    } on ExceptionModel catch (e) {
       return Left(e);
     }
   }
@@ -55,6 +67,7 @@ class LocalDataSource {
     final customerBox = await openCustomerBox();
     final customers = await customerBox.getAllValues();
     customers.forEach((key, value) {
+      value as Map<dynamic, dynamic>;
       if (value['firstName'] == firstName &&
           value['lastName'] == lastName &&
           value['dateOfBirth'] == dateOfBirth) {

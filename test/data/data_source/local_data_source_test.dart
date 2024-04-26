@@ -57,6 +57,22 @@ void main() {
       },
     );
   });
+
+  group('get all customers data source tests', () {
+    test(
+      'should return a map with two items',
+      () async {
+        await localCustomerDataSource.addCustomer(_secondCustomerFakeDto);
+
+        final result = await localCustomerDataSource.getAllCustomers();
+
+        result.fold(
+          (l) => null,
+          (r) => expect(r.length, 2),
+        );
+      },
+    );
+  });
 }
 
 final _addCustomerFakeDto = AddCustomerDto(
@@ -67,3 +83,15 @@ final _addCustomerFakeDto = AddCustomerDto(
   firstNameValueObject: FirstNameValueObject('amin'),
   lastNameValueObject: LastNameValueObject('jamali'),
 );
+
+
+final _secondCustomerFakeDto = AddCustomerDto(
+  bankAccountNumberValueObject: BankAccountNumberValueObject('123456788'),
+  dateOfBirthValueObject: DateOfBirthValueObject('2024-02-23T10:24:16.642479'),
+  emailValueObject: EmailValueObject('amin2@gmail.com'),
+  phoneNumberValueObject: PhoneNumberValueObject('9014536522', '98'),
+  firstNameValueObject: FirstNameValueObject('ali'),
+  lastNameValueObject: LastNameValueObject('jamali'),
+);
+
+
