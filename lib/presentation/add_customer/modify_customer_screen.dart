@@ -158,7 +158,7 @@ class _ModifyCustomerScreenState<T extends ModifyCustomerBaseBloc>
                 emailValueObject: EmailValueObject(emailTextController.text),
                 phoneNumberValueObject: PhoneNumberValueObject(
                   phoneNumber,
-                  selectedCountry.countryCode,
+                  selectedCountry.phoneCode,
                 ),
                 firstNameValueObject: FirstNameValueObject(
                   firstNameTextController.text,
