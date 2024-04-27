@@ -14,4 +14,8 @@ abstract class CustomerRepository {
   Future<Either<ExceptionModel, CustomerModel>> getCustomerById(
     final String id,
   );
+
+  Future<Either<ExceptionModel, String>> editCustomer(
+    final ModifyCustomerDto modifyCustomerDto,
+  );
 }

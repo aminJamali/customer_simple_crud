@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mc_crud_test/data/model/modify_customer_dto.dart';
 import 'package:mc_crud_test/domain/repository/customer_repository.dart';
-import 'package:mc_crud_test/domain/use_case/add_customer_use_case.dart';
+import 'package:mc_crud_test/domain/use_case/edit_customer_use_case.dart';
 import 'package:mc_crud_test/domain/value_object/bank_account_number_value_object.dart';
 import 'package:mc_crud_test/domain/value_object/date_of_birth_value_object.dart';
 import 'package:mc_crud_test/domain/value_object/email_value_object.dart';
@@ -16,50 +16,52 @@ class MockCustomerRepository extends Mock implements CustomerRepository {}
 
 void main() {
   late MockCustomerRepository mockCustomerRepository;
-  late AddCustomerUseCase addCustomerUseCase;
+  late EditCustomerUseCase editCustomerUseCase;
 
   setUp(
     () {
       mockCustomerRepository = MockCustomerRepository();
-      addCustomerUseCase = AddCustomerUseCase(mockCustomerRepository);
+      editCustomerUseCase = EditCustomerUseCase(mockCustomerRepository);
     },
   );
 
-  group('Add Customer Use Case Tests', () {
+  group('edit customer use case tests', () {
     test(
-      'should return added customer Id',
+      'should return edited customer id',
       () async {
-        when(() => mockCustomerRepository.addCustomer(_addCustomerFakeDto))
-            .thenAnswer(
-          (_) async => const Right(
-            '1',
-          ),
+        when(
+          () => mockCustomerRepository.editCustomer(_modifyCustomerFakeDto),
+        ).thenAnswer(
+          (_) async => const Right('1'),
         );
 
-        final result = await addCustomerUseCase.call(_addCustomerFakeDto);
+        final result = await editCustomerUseCase.call(_modifyCustomerFakeDto);
 
         result.fold(
           (l) => null,
-          (r) {
-            expect(r, '1');
-          },
+          (r) => expect(r, '1'),
         );
       },
     );
+
     test(
       'should return exception',
       () async {
-        when(() => mockCustomerRepository.addCustomer(_addCustomerFakeDto))
-            .thenAnswer(
+        when(
+          () => mockCustomerRepository.editCustomer(_modifyCustomerFakeDto),
+        ).thenAnswer(
           (_) async => const Left(
-            ExceptionModel(message: 'failure'),
+            ExceptionModel(message: 'exception'),
           ),
         );
 
-        final result = await addCustomerUseCase.call(_addCustomerFakeDto);
+        final result = await editCustomerUseCase.call(_modifyCustomerFakeDto);
 
         result.fold(
-          (l) => expect(l, const ExceptionModel(message: 'failure')),
+          (l) => expect(
+            l,
+            const ExceptionModel(message: 'exception'),
+          ),
           (r) => null,
         );
       },
@@ -67,7 +69,7 @@ void main() {
   });
 }
 
-final _addCustomerFakeDto = ModifyCustomerDto(
+final _modifyCustomerFakeDto = ModifyCustomerDto(
   id: '1',
   bankAccountNumberValueObject: BankAccountNumberValueObject('123456789'),
   dateOfBirthValueObject: DateOfBirthValueObject('2024-04-25T10:24:16.642479'),

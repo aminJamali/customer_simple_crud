@@ -3,9 +3,9 @@ import '../../../data/model/modify_customer_dto.dart';
 abstract class ModifyCustomerBaseEvent {}
 
 class ModifyCustomerEvent extends ModifyCustomerBaseEvent {
-  final ModifyCustomerDto addCustomerDto;
+  final ModifyCustomerDto modifyCustomerDto;
 
-  ModifyCustomerEvent(this.addCustomerDto);
+  ModifyCustomerEvent(this.modifyCustomerDto);
 }
 
 class GetCustomerByIdEvent extends ModifyCustomerBaseEvent {
@@ -13,3 +13,5 @@ class GetCustomerByIdEvent extends ModifyCustomerBaseEvent {
 
   GetCustomerByIdEvent(this.id);
 }
+
+

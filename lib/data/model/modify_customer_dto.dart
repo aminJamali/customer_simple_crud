@@ -1,6 +1,8 @@
 import '../../domain/entity/customer_entity.dart';
 
 class ModifyCustomerDto extends CustomerEntity {
+  final String id;
+
   ModifyCustomerDto({
     required super.bankAccountNumberValueObject,
     required super.dateOfBirthValueObject,
@@ -8,9 +10,11 @@ class ModifyCustomerDto extends CustomerEntity {
     required super.phoneNumberValueObject,
     required super.firstNameValueObject,
     required super.lastNameValueObject,
+    required this.id,
   });
 
-  Map<String, dynamic> toJson(final String id) => {
+
+  Map<String, dynamic> toJson() => {
         'bankAccountNumber': bankAccountNumberValueObject.number,
         'dateOfBirth': dateOfBirthValueObject.dateOfBirth,
         'id': id,

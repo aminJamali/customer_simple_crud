@@ -14,11 +14,19 @@ class GetCustomerByIdDoneState extends ModifyCustomerState {
   List<Object?> get props => [];
 }
 
-class GetCustomerByIdExceptionState extends ModifyCustomerState {
-  final ExceptionModel exceptionModel;
+class EditCustomerDoneState extends ModifyCustomerState {
   final String id;
 
-  GetCustomerByIdExceptionState(this.exceptionModel, this.id);
+  EditCustomerDoneState(this.id);
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GetCustomerByIdExceptionState extends ModifyCustomerState {
+  final ExceptionModel exceptionModel;
+
+  GetCustomerByIdExceptionState(this.exceptionModel);
 
   @override
   List<Object?> get props => [];
@@ -29,10 +37,10 @@ class GetCustomerByIdLoadingState extends ModifyCustomerState {
   List<Object?> get props => [];
 }
 
-class AddCustomerDoneState extends ModifyCustomerState {
+class ModifyCustomerDoneState extends ModifyCustomerState {
   final String id;
 
-  AddCustomerDoneState(this.id);
+  ModifyCustomerDoneState(this.id);
 
   @override
   List<Object?> get props => [];

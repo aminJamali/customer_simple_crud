@@ -21,11 +21,11 @@ class AddCustomerBloc extends ModifyCustomerBaseBloc {
   ) async {
     emit(ModifyCustomerLoadingState());
     final result =
-        await addCustomerUseCase.call(addCustomerEvent.addCustomerDto);
+        await addCustomerUseCase.call(addCustomerEvent.modifyCustomerDto);
 
     result.fold(
       (l) => emit(ModifyCustomerExceptionState(l)),
-      (r) => emit(AddCustomerDoneState(r)),
+      (r) => emit(ModifyCustomerDoneState(r)),
     );
   }
 }

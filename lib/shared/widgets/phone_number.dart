@@ -44,6 +44,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
           selectedCountryCode = value;
         }
       });
+      _isPhoneNumberValid=true;
     }
     setState(() {});
   }

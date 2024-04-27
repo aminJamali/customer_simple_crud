@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/use_case/add_customer_use_case.dart';
+import '../../../domain/use_case/edit_customer_use_case.dart';
 import '../../../domain/use_case/get_all_customers_use_case.dart';
 import '../../../domain/use_case/get_customer_by_id_use_case.dart';
 import '../../../presentation/add_customer/bloc/add_customer_bloc.dart';
@@ -56,12 +57,14 @@ class AppRouter {
               ) =>
                   EditCustomerBloc(
                 ModifyCustomerLoadingState(),
-                id: customerId,
-                getCustomerUseCaseEvent:
+                editCustomerUseCase:
+                    AppInjections.customerGetIt<EditCustomerUseCase>(),
+                getCustomerUseCase:
                     AppInjections.customerGetIt<GetCustomerByIdUseCase>(),
               ),
-              child: const ModifyCustomerScreen<EditCustomerBloc>(
+              child: ModifyCustomerScreen<EditCustomerBloc>(
                 screenTitle: 'Edit Customer',
+                customerId: customerId,
               ),
             );
           },

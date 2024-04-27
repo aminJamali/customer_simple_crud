@@ -1,29 +1,48 @@
 import 'package:dartz/dartz.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../shared/models/exception_model.dart';
 import '../model/modify_customer_dto.dart';
 
 class LocalDataSource {
   static const String customers = 'customers';
-  static const String db = 'CustomerDb';
 
-  Future<BoxCollection> openOrCreateDb() async {
-    final directory = await getApplicationDocumentsDirectory();
+  final BoxCollection boxCollection;
 
-    return BoxCollection.open(
-      db,
-      {customers},
-      path: directory.path,
-    );
-  }
+  LocalDataSource(this.boxCollection);
 
-  Future<CollectionBox<dynamic>> openCustomerBox() async {
-    final collection = await openOrCreateDb();
+  Future<CollectionBox<dynamic>> openCustomerBox() =>
+      boxCollection.openBox(customers);
 
-    return collection.openBox(customers);
+  Future<Either<ExceptionModel, String>> editCustomer(
+    final ModifyCustomerDto modifyCustomerDto,
+  ) async {
+    try {
+      final customers = await openCustomerBox();
+
+      await validateCustomerToEdit(
+        id: modifyCustomerDto.id!,
+        firstName: modifyCustomerDto.firstNameValueObject.firstName,
+        lastName: modifyCustomerDto.lastNameValueObject.lastName,
+        email: modifyCustomerDto.emailValueObject.email,
+        dateOfBirth: modifyCustomerDto.dateOfBirthValueObject.dateOfBirth,
+      );
+
+      await customers.put(
+        modifyCustomerDto.id!,
+        modifyCustomerDto.toJson(),
+      );
+
+      return Right(modifyCustomerDto.id!);
+    } on ExceptionModel catch (e) {
+      return Left(e);
+    } on Exception catch (e) {
+      return Left(
+        ExceptionModel(
+          message: e.toString(),
+        ),
+      );
+    }
   }
 
   Future<Either<ExceptionModel, Map<dynamic, dynamic>>> getCustomerById(
@@ -36,6 +55,12 @@ class LocalDataSource {
       return Right(customer);
     } on ExceptionModel catch (e) {
       return Left(e);
+    } on Exception catch (e) {
+      return Left(
+        ExceptionModel(
+          message: e.toString(),
+        ),
+      );
     }
   }
 
@@ -48,6 +73,12 @@ class LocalDataSource {
       return Right(customers);
     } on ExceptionModel catch (e) {
       return Left(e);
+    } on Exception catch (e) {
+      return Left(
+        ExceptionModel(
+          message: e.toString(),
+        ),
+      );
     }
   }
 
@@ -62,13 +93,41 @@ class LocalDataSource {
         email: addCustomerDto.emailValueObject.email,
         dateOfBirth: addCustomerDto.dateOfBirthValueObject.dateOfBirth,
       );
-      final String uuid = const Uuid().v1();
-      await customerBox.put(uuid, addCustomerDto.toJson(uuid));
+      await customerBox.put(addCustomerDto.id, addCustomerDto.toJson());
 
-      return Right(uuid);
+      return Right(addCustomerDto.id);
     } on ExceptionModel catch (e) {
       return Left(e);
+    } on Exception catch (e) {
+      return Left(
+        ExceptionModel(
+          message: e.toString(),
+        ),
+      );
     }
+  }
+
+  Future<void> validateCustomerToEdit({
+    required final String firstName,
+    required final String lastName,
+    required final String email,
+    required final String dateOfBirth,
+    required final String id,
+  }) async {
+    final customerBox = await openCustomerBox();
+    final customers = await customerBox.getAllValues();
+    customers.forEach((key, value) {
+      value as Map<dynamic, dynamic>;
+      if (value['firstName'] == firstName &&
+          value['lastName'] == lastName &&
+          value['dateOfBirth'] == dateOfBirth &&
+          value['id'] != id) {
+        throw const ExceptionModel(message: 'Customer is duplicate');
+      }
+      if (value['email'] == email && value['id'] != id) {
+        throw const ExceptionModel(message: 'Email is duplicate');
+      }
+    });
   }
 
   Future<void> validateCustomer({

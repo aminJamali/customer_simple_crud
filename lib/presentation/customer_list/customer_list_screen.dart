@@ -91,6 +91,9 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
               RouteNames.editCustomer,
               arguments: state.customers[index].id,
             );
+            if (mounted) {
+              context.read<GetAllCustomersBloc>().add(GetAllCustomersEvent());
+            }
           },
         ),
       );

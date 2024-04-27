@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../application/utils/utils.dart';
 import '../../data/model/modify_customer_dto.dart';
@@ -21,8 +22,13 @@ import 'bloc/modify_customer_state.dart';
 class ModifyCustomerScreen<B extends ModifyCustomerBaseBloc>
     extends StatefulWidget {
   final String screenTitle;
+  final String? customerId;
 
-  const ModifyCustomerScreen({required this.screenTitle, super.key});
+  const ModifyCustomerScreen({
+    required this.screenTitle,
+    this.customerId,
+    super.key,
+  });
 
   @override
   State<ModifyCustomerScreen> createState() => _ModifyCustomerScreenState<B>();
@@ -42,9 +48,19 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
   String? selectedCountryCode;
 
   @override
+  void initState() {
+    if (widget.customerId != null) {
+      context.read<B>().add(
+            GetCustomerByIdEvent(widget.customerId!),
+          );
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title:  Text(widget.screenTitle),
+          title: Text(widget.screenTitle),
         ),
         body: SafeArea(
           child: Padding(
@@ -58,8 +74,8 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
                       _onAddCustomerException(state);
                     }
 
-                    if (state is AddCustomerDoneState) {
-                      _onAddCustomerDone();
+                    if (state is ModifyCustomerDoneState) {
+                      _onModifyCustomerDone(state.id);
                     }
                     if (state is GetCustomerByIdDoneState) {
                       _onGetCustomerByIdDoneState(state);
@@ -87,7 +103,7 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
       Center(
         child: ElevatedButton(
           onPressed: () => context.read<B>().add(
-                GetCustomerByIdEvent(state.id),
+                GetCustomerByIdEvent(widget.customerId!),
               ),
           child: const Text('Try again'),
         ),
@@ -178,9 +194,11 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
             : const Text('Submit'),
       );
 
-  Future<void> _onGetCustomerByIdDoneState(
+  void _onGetCustomerByIdDoneState(
     final GetCustomerByIdDoneState state,
-  ) async {
+  ) {
+    selectedDateOfBirth =
+        DateTime.parse(state.customerModel.dateOfBirthValueObject.dateOfBirth);
     firstNameTextController.text =
         state.customerModel.firstNameValueObject.firstName;
     lastNameTextController.text =
@@ -188,14 +206,9 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
     accountNumberTextController.text =
         state.customerModel.bankAccountNumberValueObject.number;
     emailTextController.text = state.customerModel.emailValueObject.email;
-    selectedDateOfBirth = DateTime.parse(
-      state.customerModel.dateOfBirthValueObject.dateOfBirth,
-    );
     phoneNumber = state.customerModel.phoneNumberValueObject.phoneNumber;
     selectedCountryCode =
         state.customerModel.phoneNumberValueObject.countryCode;
-    selectedDateOfBirth =
-        DateTime.parse(state.customerModel.dateOfBirthValueObject.dateOfBirth);
   }
 
   void _onAddCustomerException(final ModifyCustomerExceptionState state) {
@@ -217,6 +230,7 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
       }
       try {
         final modifyCustomerDto = ModifyCustomerDto(
+          id: widget.customerId ?? const Uuid().v1(),
           bankAccountNumberValueObject: BankAccountNumberValueObject(
             accountNumberTextController.text,
           ),
@@ -244,7 +258,7 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
     }
   }
 
-  void _onAddCustomerDone() {
+  void _onModifyCustomerDone(final String id) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Center(
@@ -252,6 +266,7 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
         ),
       ),
     );
+    Navigator.pop(context, id);
     // Navigator.pop(context);
   }
 }

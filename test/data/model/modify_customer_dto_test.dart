@@ -16,6 +16,7 @@ void main() {
     'should return expected json of modify customer',
     () {
       final json = ModifyCustomerDto(
+        id: '1',
         bankAccountNumberValueObject: BankAccountNumberValueObject('123456789'),
         dateOfBirthValueObject:
             DateOfBirthValueObject('2024-04-25T10:24:16.642479'),
@@ -23,7 +24,7 @@ void main() {
         phoneNumberValueObject: PhoneNumberValueObject('9014536521', '98'),
         firstNameValueObject: FirstNameValueObject('amin'),
         lastNameValueObject: LastNameValueObject('jamali'),
-      ).toJson('1');
+      ).toJson();
       expect(
         _fakeJson,
         json,
@@ -35,6 +36,7 @@ void main() {
     () {
       try {
         ModifyCustomerDto(
+          id: '1',
           bankAccountNumberValueObject:
               BankAccountNumberValueObject('123456789'),
           dateOfBirthValueObject:
@@ -54,6 +56,7 @@ void main() {
     () {
       try {
         ModifyCustomerDto(
+          id: '2',
           bankAccountNumberValueObject: BankAccountNumberValueObject('12345'),
           dateOfBirthValueObject:
               DateOfBirthValueObject('2024-04-25T10:24:16.642479'),

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../domain/repository/customer_repository.dart';
 import '../../domain/value_object/bank_account_number_value_object.dart';
@@ -70,4 +71,10 @@ class CustomerRepositoryImpl extends CustomerRepository {
       ),
     );
   }
+
+  @override
+  Future<Either<ExceptionModel, String>> editCustomer(
+    ModifyCustomerDto modifyCustomerDto,
+  ) =>
+      localDataSource.editCustomer(modifyCustomerDto);
 }
