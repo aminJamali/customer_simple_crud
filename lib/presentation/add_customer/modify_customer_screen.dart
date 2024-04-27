@@ -227,6 +227,7 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
         BotToast.showText(
           text: 'Date of birth is required',
         );
+        return;
       }
       try {
         final modifyCustomerDto = ModifyCustomerDto(
