@@ -15,7 +15,7 @@ void main() {
   test(
     'should return expected json of modify customer',
     () {
-      final json = AddCustomerDto(
+      final json = ModifyCustomerDto(
         bankAccountNumberValueObject: BankAccountNumberValueObject('123456789'),
         dateOfBirthValueObject:
             DateOfBirthValueObject('2024-04-25T10:24:16.642479'),
@@ -34,7 +34,7 @@ void main() {
     'should throw EmailIsNotValid failure',
     () {
       try {
-        AddCustomerDto(
+        ModifyCustomerDto(
           bankAccountNumberValueObject:
               BankAccountNumberValueObject('123456789'),
           dateOfBirthValueObject:
@@ -53,7 +53,7 @@ void main() {
     'should throw BankAccount Number is not valid failure',
     () {
       try {
-        AddCustomerDto(
+        ModifyCustomerDto(
           bankAccountNumberValueObject: BankAccountNumberValueObject('12345'),
           dateOfBirthValueObject:
               DateOfBirthValueObject('2024-04-25T10:24:16.642479'),

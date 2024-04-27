@@ -14,20 +14,21 @@ import '../../domain/value_object/last_name_value_object.dart';
 import '../../domain/value_object/phone_number_value_object.dart';
 import '../../shared/widgets/phone_number.dart';
 import '../../shared/widgets/select_date_widget.dart';
-import 'bloc/add_customer_bloc.dart';
-import 'bloc/add_customer_event.dart';
-import 'bloc/add_customer_state.dart';
 import 'bloc/modify_customer_base_bloc.dart';
+import 'bloc/modify_customer_event.dart';
+import 'bloc/modify_customer_state.dart';
 
-class ModifyCustomerScreen<T extends ModifyCustomerBaseBloc>
+class ModifyCustomerScreen<B extends ModifyCustomerBaseBloc>
     extends StatefulWidget {
-  const ModifyCustomerScreen({super.key});
+  final String screenTitle;
+
+  const ModifyCustomerScreen({required this.screenTitle, super.key});
 
   @override
-  State<ModifyCustomerScreen> createState() => _ModifyCustomerScreenState<T>();
+  State<ModifyCustomerScreen> createState() => _ModifyCustomerScreenState<B>();
 }
 
-class _ModifyCustomerScreenState<T extends ModifyCustomerBaseBloc>
+class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
     extends State<ModifyCustomerScreen> {
   final TextEditingController firstNameTextController = TextEditingController();
   final TextEditingController lastNameTextController = TextEditingController();
@@ -36,13 +37,14 @@ class _ModifyCustomerScreenState<T extends ModifyCustomerBaseBloc>
       TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
   DateTime? selectedDateOfBirth;
-  late String phoneNumber;
-  late CountryWithPhoneCode selectedCountry;
+  String? phoneNumber;
+  CountryWithPhoneCode? selectedCountry;
+  String? selectedCountryCode;
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('Add Customer'),
+          title:  Text(widget.screenTitle),
         ),
         body: SafeArea(
           child: Padding(
@@ -50,10 +52,44 @@ class _ModifyCustomerScreenState<T extends ModifyCustomerBaseBloc>
             child: SingleChildScrollView(
               child: Form(
                 key: formKey,
-                child: _body(context),
+                child: BlocConsumer<B, ModifyCustomerState>(
+                  listener: (final _, final state) {
+                    if (state is ModifyCustomerExceptionState) {
+                      _onAddCustomerException(state);
+                    }
+
+                    if (state is AddCustomerDoneState) {
+                      _onAddCustomerDone();
+                    }
+                    if (state is GetCustomerByIdDoneState) {
+                      _onGetCustomerByIdDoneState(state);
+                    }
+                  },
+                  builder: (final _, final state) {
+                    if (state is GetCustomerByIdLoadingState) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (state is GetCustomerByIdExceptionState) {
+                      return _retry(context, state);
+                    }
+                    return _body(context);
+                  },
+                ),
               ),
             ),
           ),
+        ),
+      );
+
+  Widget _retry(BuildContext context, GetCustomerByIdExceptionState state) =>
+      Center(
+        child: ElevatedButton(
+          onPressed: () => context.read<B>().add(
+                GetCustomerByIdEvent(state.id),
+              ),
+          child: const Text('Try again'),
         ),
       );
 
@@ -113,74 +149,56 @@ class _ModifyCustomerScreenState<T extends ModifyCustomerBaseBloc>
           ),
           Utils.largeVerticalSpacer,
           PhoneNumber(
+            countryCode: selectedCountryCode,
+            phoneNumber: phoneNumber,
             onPhoneNumberChanged: (final selectedCountry, final phoneNumber) {
               this.phoneNumber = phoneNumber;
               this.selectedCountry = selectedCountry;
+              this.selectedCountryCode = selectedCountry.phoneCode;
             },
           ),
           Utils.largeVerticalSpacer,
           SelectDateWidget(
+            selectedDate: selectedDateOfBirth,
             onDateSelected: (final value) {
               selectedDateOfBirth = value;
             },
           ),
           Utils.largeVerticalSpacer,
-          BlocConsumer<T, AddCustomerState>(
-            listener: (final _, final state) {
-              if (state is AddCustomerExceptionState) {
-                _onAddCustomerException(state);
-              }
-              if (state is AddCustomerDoneState) {
-                _onAddCustomerDone();
-              }
-            },
+          BlocBuilder<B, ModifyCustomerState>(
             builder: (final _, final state) => _submit(context, state),
           ),
         ],
       );
 
   Widget _submit(BuildContext context, Object? state) => ElevatedButton(
-        onPressed: () {
-          if (formKey.currentState!.validate()) {
-            if (selectedDateOfBirth == null) {
-              BotToast.showText(
-                text: 'Date of birth is required',
-              );
-            }
-            try {
-              final addCustomerDto = AddCustomerDto(
-                bankAccountNumberValueObject: BankAccountNumberValueObject(
-                  accountNumberTextController.text,
-                ),
-                dateOfBirthValueObject: DateOfBirthValueObject(
-                  selectedDateOfBirth.toString(),
-                ),
-                emailValueObject: EmailValueObject(emailTextController.text),
-                phoneNumberValueObject: PhoneNumberValueObject(
-                  phoneNumber,
-                  selectedCountry.phoneCode,
-                ),
-                firstNameValueObject: FirstNameValueObject(
-                  firstNameTextController.text,
-                ),
-                lastNameValueObject: LastNameValueObject(
-                  lastNameTextController.text,
-                ),
-              );
-              context.read<AddCustomerBloc>().add(
-                    AddCustomerEvent(addCustomerDto),
-                  );
-            } on BaseFailure catch (e) {
-              BotToast.showText(text: e.message);
-            }
-          }
-        },
-        child: state is AddCustomerLoadingState
+        onPressed: _onSubmit,
+        child: state is ModifyCustomerLoadingState
             ? const CircularProgressIndicator()
             : const Text('Submit'),
       );
 
-  void _onAddCustomerException(final AddCustomerExceptionState state) {
+  Future<void> _onGetCustomerByIdDoneState(
+    final GetCustomerByIdDoneState state,
+  ) async {
+    firstNameTextController.text =
+        state.customerModel.firstNameValueObject.firstName;
+    lastNameTextController.text =
+        state.customerModel.lastNameValueObject.lastName;
+    accountNumberTextController.text =
+        state.customerModel.bankAccountNumberValueObject.number;
+    emailTextController.text = state.customerModel.emailValueObject.email;
+    selectedDateOfBirth = DateTime.parse(
+      state.customerModel.dateOfBirthValueObject.dateOfBirth,
+    );
+    phoneNumber = state.customerModel.phoneNumberValueObject.phoneNumber;
+    selectedCountryCode =
+        state.customerModel.phoneNumberValueObject.countryCode;
+    selectedDateOfBirth =
+        DateTime.parse(state.customerModel.dateOfBirthValueObject.dateOfBirth);
+  }
+
+  void _onAddCustomerException(final ModifyCustomerExceptionState state) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Center(
@@ -188,6 +206,42 @@ class _ModifyCustomerScreenState<T extends ModifyCustomerBaseBloc>
         ),
       ),
     );
+  }
+
+  void _onSubmit() {
+    if (formKey.currentState!.validate()) {
+      if (selectedDateOfBirth == null) {
+        BotToast.showText(
+          text: 'Date of birth is required',
+        );
+      }
+      try {
+        final modifyCustomerDto = ModifyCustomerDto(
+          bankAccountNumberValueObject: BankAccountNumberValueObject(
+            accountNumberTextController.text,
+          ),
+          dateOfBirthValueObject: DateOfBirthValueObject(
+            selectedDateOfBirth.toString(),
+          ),
+          emailValueObject: EmailValueObject(emailTextController.text),
+          phoneNumberValueObject: PhoneNumberValueObject(
+            phoneNumber!,
+            selectedCountry!.phoneCode,
+          ),
+          firstNameValueObject: FirstNameValueObject(
+            firstNameTextController.text,
+          ),
+          lastNameValueObject: LastNameValueObject(
+            lastNameTextController.text,
+          ),
+        );
+        context.read<B>().add(
+              ModifyCustomerEvent(modifyCustomerDto),
+            );
+      } on BaseFailure catch (e) {
+        BotToast.showText(text: e.message);
+      }
+    }
   }
 
   void _onAddCustomerDone() {

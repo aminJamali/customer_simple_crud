@@ -11,8 +11,8 @@ import 'package:mc_crud_test/domain/value_object/first_name_value_object.dart';
 import 'package:mc_crud_test/domain/value_object/last_name_value_object.dart';
 import 'package:mc_crud_test/domain/value_object/phone_number_value_object.dart';
 import 'package:mc_crud_test/presentation/add_customer/bloc/add_customer_bloc.dart';
-import 'package:mc_crud_test/presentation/add_customer/bloc/add_customer_event.dart';
-import 'package:mc_crud_test/presentation/add_customer/bloc/add_customer_state.dart';
+import 'package:mc_crud_test/presentation/add_customer/bloc/modify_customer_event.dart';
+import 'package:mc_crud_test/presentation/add_customer/bloc/modify_customer_state.dart';
 import 'package:mc_crud_test/shared/models/exception_model.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -34,7 +34,7 @@ void main() {
     },
   );
 
-  blocTest<AddCustomerBloc, AddCustomerState>(
+  blocTest<AddCustomerBloc, ModifyCustomerState>(
     'Emits [AddCustomerLoadingState,AddCustomerDoneState] when AddCustomerEvent is added',
     build: () {
       when(
@@ -45,15 +45,15 @@ void main() {
       return addCustomerBloc;
     },
     act: (bloc) => bloc.add(
-      AddCustomerEvent(_addCustomerFakeDto),
+      ModifyCustomerEvent(_addCustomerFakeDto),
     ),
     expect: () => [
-      AddCustomerLoadingState(),
+      ModifyCustomerLoadingState(),
       AddCustomerDoneState('1'),
     ],
   );
 
-  blocTest<AddCustomerBloc, AddCustomerState>(
+  blocTest<AddCustomerBloc, ModifyCustomerState>(
     'Emits [AddCustomerLoadingState,AddCustomerExceptionState] when AddCustomerEvent is added',
     build: () {
       when(
@@ -66,16 +66,16 @@ void main() {
       return addCustomerBloc;
     },
     act: (bloc) => bloc.add(
-      AddCustomerEvent(_addCustomerFakeDto),
+      ModifyCustomerEvent(_addCustomerFakeDto),
     ),
     expect: () => [
-      AddCustomerLoadingState(),
-      AddCustomerExceptionState(const ExceptionModel(message: 'exception')),
+      ModifyCustomerLoadingState(),
+      ModifyCustomerExceptionState(const ExceptionModel(message: 'exception')),
     ],
   );
 }
 
-final _addCustomerFakeDto = AddCustomerDto(
+final _addCustomerFakeDto = ModifyCustomerDto(
   bankAccountNumberValueObject: BankAccountNumberValueObject('123456789'),
   dateOfBirthValueObject: DateOfBirthValueObject('2024-04-25T10:24:16.642479'),
   emailValueObject: EmailValueObject('amin@gmail.com'),

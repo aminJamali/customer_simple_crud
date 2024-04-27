@@ -26,6 +26,19 @@ class LocalDataSource {
     return collection.openBox(customers);
   }
 
+  Future<Either<ExceptionModel, Map<dynamic, dynamic>>> getCustomerById(
+    final String id,
+  ) async {
+    final customers = await openCustomerBox();
+    try {
+      final customer = await customers.get(id);
+
+      return Right(customer);
+    } on ExceptionModel catch (e) {
+      return Left(e);
+    }
+  }
+
   Future<Either<ExceptionModel, Map<String, dynamic>>> getAllCustomers() async {
     try {
       final customerBox = await openCustomerBox();
@@ -39,7 +52,7 @@ class LocalDataSource {
   }
 
   Future<Either<ExceptionModel, String>> addCustomer(
-    AddCustomerDto addCustomerDto,
+    ModifyCustomerDto addCustomerDto,
   ) async {
     try {
       final customerBox = await openCustomerBox();

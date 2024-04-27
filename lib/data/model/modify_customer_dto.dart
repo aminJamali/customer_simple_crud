@@ -1,7 +1,7 @@
 import '../../domain/entity/customer_entity.dart';
 
-class AddCustomerDto extends CustomerEntity {
-  AddCustomerDto({
+class ModifyCustomerDto extends CustomerEntity {
+  ModifyCustomerDto({
     required super.bankAccountNumberValueObject,
     required super.dateOfBirthValueObject,
     required super.emailValueObject,

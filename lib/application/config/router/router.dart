@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/use_case/add_customer_use_case.dart';
 import '../../../domain/use_case/get_all_customers_use_case.dart';
+import '../../../domain/use_case/get_customer_by_id_use_case.dart';
 import '../../../presentation/add_customer/bloc/add_customer_bloc.dart';
-import '../../../presentation/add_customer/bloc/add_customer_state.dart';
+import '../../../presentation/add_customer/bloc/edit_customer_bloc.dart';
+import '../../../presentation/add_customer/bloc/modify_customer_state.dart';
 import '../../../presentation/add_customer/modify_customer_screen.dart';
 import '../../../presentation/customer_list/bloc/get_all_customers_bloc.dart';
 import '../../../presentation/customer_list/bloc/get_all_customers_state.dart';
@@ -26,7 +28,9 @@ class AppRouter {
               addCustomerUseCase:
                   AppInjections.customerGetIt<AddCustomerUseCase>(),
             ),
-            child: const ModifyCustomerScreen<AddCustomerBloc>(),
+            child: const ModifyCustomerScreen<AddCustomerBloc>(
+              screenTitle: 'Add Customer',
+            ),
           ),
         );
       case RouteNames.customerList:
@@ -41,6 +45,26 @@ class AppRouter {
             ),
             child: const CustomerListScreen(),
           ),
+        );
+      case RouteNames.editCustomer:
+        return MaterialPageRoute(
+          builder: (final context) {
+            final customerId = settings.arguments! as String;
+            return BlocProvider(
+              create: (
+                final _,
+              ) =>
+                  EditCustomerBloc(
+                ModifyCustomerLoadingState(),
+                id: customerId,
+                getCustomerUseCaseEvent:
+                    AppInjections.customerGetIt<GetCustomerByIdUseCase>(),
+              ),
+              child: const ModifyCustomerScreen<EditCustomerBloc>(
+                screenTitle: 'Edit Customer',
+              ),
+            );
+          },
         );
       default:
         return MaterialPageRoute(

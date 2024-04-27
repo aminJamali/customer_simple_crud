@@ -75,7 +75,7 @@ void main() {
   });
 }
 
-final _addCustomerFakeDto = AddCustomerDto(
+final _addCustomerFakeDto = ModifyCustomerDto(
   bankAccountNumberValueObject: BankAccountNumberValueObject('123456789'),
   dateOfBirthValueObject: DateOfBirthValueObject('2024-04-25T10:24:16.642479'),
   emailValueObject: EmailValueObject('amin@gmail.com'),
@@ -85,7 +85,7 @@ final _addCustomerFakeDto = AddCustomerDto(
 );
 
 
-final _secondCustomerFakeDto = AddCustomerDto(
+final _secondCustomerFakeDto = ModifyCustomerDto(
   bankAccountNumberValueObject: BankAccountNumberValueObject('123456788'),
   dateOfBirthValueObject: DateOfBirthValueObject('2024-02-23T10:24:16.642479'),
   emailValueObject: EmailValueObject('amin2@gmail.com'),

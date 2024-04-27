@@ -51,7 +51,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                   return _loading();
                 }
                 if (state is GetAllCustomersDoneState) {
-                  return _customersList(state);
+                  return _customersList(state, context);
                 }
                 if (state is GetAllCustomersEmptyState) {
                   return _emptyText();
@@ -80,9 +80,18 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
         ),
       );
 
-  Widget _customersList(GetAllCustomersDoneState state) => ListView.builder(
+  Widget _customersList(GetAllCustomersDoneState state, BuildContext context) =>
+      ListView.builder(
         itemCount: state.customers.length,
-        itemBuilder: (final _, final index) =>
-            CustomerListItem(customerModel: state.customers[index]),
+        itemBuilder: (final _, final index) => CustomerListItem(
+          customerModel: state.customers[index],
+          onEdit: () async {
+            await Navigator.pushNamed(
+              context,
+              RouteNames.editCustomer,
+              arguments: state.customers[index].id,
+            );
+          },
+        ),
       );
 }

@@ -17,7 +17,6 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
 
   @override
   void initState() {
-    initialDate = widget.selectedDate ?? DateTime.now();
     if (widget.selectedDate != null) {
       title = widget.selectedDate.toString().split(' ').first;
     }

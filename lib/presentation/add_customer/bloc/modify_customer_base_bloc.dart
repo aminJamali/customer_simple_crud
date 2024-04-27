@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'add_customer_event.dart';
-import 'add_customer_state.dart';
+import 'modify_customer_event.dart';
+import 'modify_customer_state.dart';
 
 abstract class ModifyCustomerBaseBloc
-    extends Bloc<AddCustomerEvent, AddCustomerState> {
+    extends Bloc<ModifyCustomerBaseEvent, ModifyCustomerState> {
   ModifyCustomerBaseBloc(super.initialState);
 }

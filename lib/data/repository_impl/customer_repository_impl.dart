@@ -19,7 +19,7 @@ class CustomerRepositoryImpl extends CustomerRepository {
 
   @override
   Future<Either<ExceptionModel, String>> addCustomer(
-    AddCustomerDto addCustomerDto,
+    ModifyCustomerDto addCustomerDto,
   ) =>
       localDataSource.addCustomer(addCustomerDto);
 
@@ -36,10 +36,8 @@ class CustomerRepositoryImpl extends CustomerRepository {
           customersList.add(
             CustomerModel(
               id: value['id'],
-              firstNameValueObject:
-                  FirstNameValueObject(value['firstName']),
-              lastNameValueObject:
-                  LastNameValueObject(value['lastName']),
+              firstNameValueObject: FirstNameValueObject(value['firstName']),
+              lastNameValueObject: LastNameValueObject(value['lastName']),
               bankAccountNumberValueObject: BankAccountNumberValueObject(
                 value['bankAccountNumber'],
               ),
@@ -56,6 +54,20 @@ class CustomerRepositoryImpl extends CustomerRepository {
 
         return Right(customersList);
       },
+    );
+  }
+
+  @override
+  Future<Either<ExceptionModel, CustomerModel>> getCustomerById(
+    String id,
+  ) async {
+    final result = await localDataSource.getCustomerById(id);
+
+    return result.fold(
+      Left.new,
+      (r) => Right(
+        CustomerModel.fromJson(r),
+      ),
     );
   }
 }

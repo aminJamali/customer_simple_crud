@@ -19,7 +19,7 @@ class CustomerModel extends CustomerEntity {
     required super.lastNameValueObject,
   });
 
-  factory CustomerModel.fromJson(final Map<String, dynamic> json) =>
+  factory CustomerModel.fromJson(final Map<dynamic, dynamic> json) =>
       CustomerModel(
         id: json['id'],
         firstNameValueObject:

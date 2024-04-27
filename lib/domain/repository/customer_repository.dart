@@ -6,8 +6,12 @@ import '../../shared/models/exception_model.dart';
 
 abstract class CustomerRepository {
   Future<Either<ExceptionModel, String>> addCustomer(
-    final AddCustomerDto addCustomerDto,
+    final ModifyCustomerDto addCustomerDto,
   );
 
   Future<Either<ExceptionModel, List<CustomerModel>>> getAllCustomers();
+
+  Future<Either<ExceptionModel, CustomerModel>> getCustomerById(
+    final String id,
+  );
 }

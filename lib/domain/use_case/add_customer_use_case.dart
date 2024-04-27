@@ -5,12 +5,12 @@ import '../../data/model/modify_customer_dto.dart';
 import '../../shared/models/exception_model.dart';
 import '../repository/customer_repository.dart';
 
-class AddCustomerUseCase extends BaseUseCase<String, AddCustomerDto> {
+class AddCustomerUseCase extends BaseUseCase<String, ModifyCustomerDto> {
   final CustomerRepository customerRepository;
 
   AddCustomerUseCase(this.customerRepository);
 
   @override
-  Future<Either<ExceptionModel, String>> call(AddCustomerDto params) =>
+  Future<Either<ExceptionModel, String>> call(ModifyCustomerDto params) =>
       customerRepository.addCustomer(params);
 }

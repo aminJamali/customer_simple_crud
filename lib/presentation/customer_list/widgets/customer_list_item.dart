@@ -5,8 +5,13 @@ import '../../../data/model/customer_model.dart';
 
 class CustomerListItem extends StatelessWidget {
   final CustomerModel customerModel;
+  final void Function() onEdit;
 
-  const CustomerListItem({required this.customerModel, super.key});
+  const CustomerListItem({
+    required this.onEdit,
+    required this.customerModel,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) => Card(
@@ -26,6 +31,9 @@ class CustomerListItem extends StatelessWidget {
                   ),
                   Utils.smallHorizontalSpacer,
                   Text(customerModel.emailValueObject.email),
+                  const Spacer(),
+                  _menu(),
+                  Utils.mediumHorizontalSpacer,
                 ],
               ),
               Utils.mediumVerticalSpacer,
@@ -33,8 +41,20 @@ class CustomerListItem extends StatelessWidget {
                 '${customerModel.phoneNumberValueObject.countryCode} '
                 '${customerModel.phoneNumberValueObject.phoneNumber}',
               ),
+              Utils.mediumVerticalSpacer,
             ],
           ),
         ),
+      );
+
+  Widget _menu() => PopupMenuButton<int>(
+        icon: const Icon(Icons.more_vert),
+        itemBuilder: (context) => <PopupMenuEntry<int>>[
+          PopupMenuItem<int>(
+            onTap: onEdit,
+            value: 1,
+            child: const Icon(Icons.edit),
+          ),
+        ],
       );
 }

@@ -6,8 +6,15 @@ import '../../application/utils/utils.dart';
 class PhoneNumber extends StatefulWidget {
   final void Function(CountryWithPhoneCode country, String phoneNumber)
       onPhoneNumberChanged;
+  final String? phoneNumber;
+  final String? countryCode;
 
-  const PhoneNumber({required this.onPhoneNumberChanged, super.key});
+  const PhoneNumber({
+    required this.onPhoneNumberChanged,
+    this.phoneNumber,
+    this.countryCode,
+    super.key,
+  });
 
   @override
   State<PhoneNumber> createState() => _PhoneNumberState();
@@ -22,13 +29,30 @@ class _PhoneNumberState extends State<PhoneNumber> {
 
   @override
   void initState() {
-    getAllSupportedRegionsFromLibPhone();
     super.initState();
+    getAllSupportedRegionsFromLibPhone();
   }
 
   Future<void> getAllSupportedRegionsFromLibPhone() async {
     supportedRegions = await getAllSupportedRegions();
+    if (widget.phoneNumber != null) {
+      textController.text = widget.phoneNumber!;
+    }
+    if (widget.countryCode != null) {
+      supportedRegions.forEach((key, value) {
+        if (value.phoneCode == widget.countryCode) {
+          selectedCountryCode = value;
+        }
+      });
+    }
     setState(() {});
+  }
+
+  @override
+  void setState(void Function() s) {
+    if (mounted) {
+      super.setState(s);
+    }
   }
 
   @override
