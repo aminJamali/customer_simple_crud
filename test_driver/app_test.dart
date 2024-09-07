@@ -4,7 +4,7 @@ import 'package:flutter_gherkin/flutter_gherkin.dart';
 import 'package:gherkin/gherkin.dart';
 
 import 'hooks/clear_cache_hook.dart';
-import 'steps/add_invalid_customer_step.dart';
+import 'steps/add_customer_steps.dart';
 
 Future<void> main(List<String> args) {
   if (args.isEmpty) {
