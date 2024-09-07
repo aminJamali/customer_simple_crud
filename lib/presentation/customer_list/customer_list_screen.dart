@@ -26,6 +26,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         floatingActionButton: FloatingActionButton(
+          key: const Key('addCustomer'),
           onPressed: () async {
             await Navigator.pushNamed(context, RouteNames.addCustomer);
             if (context.mounted) {
@@ -64,7 +65,10 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
       );
 
   Widget _emptyText() => const Center(
-        child: Text('Nothing to show!'),
+        child: Text(
+          'Nothing to show!',
+          key: Key('nothingToShow'),
+        ),
       );
 
   Widget _loading() => const Center(

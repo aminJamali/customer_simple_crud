@@ -49,9 +49,11 @@ class CustomerListItem extends StatelessWidget {
 
   Widget _menu() => PopupMenuButton<int>(
         icon: const Icon(Icons.more_vert),
+        key: const Key('more'),
         itemBuilder: (context) => <PopupMenuEntry<int>>[
           PopupMenuItem<int>(
             onTap: onEdit,
+            key: const Key('edit'),
             value: 1,
             child: const Icon(Icons.edit),
           ),

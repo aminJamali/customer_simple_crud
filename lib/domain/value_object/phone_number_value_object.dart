@@ -1,17 +1,11 @@
 
-import '../failure/field_is_required_failure.dart';
 
 class PhoneNumberValueObject {
   final String phoneNumber;
   final String countryCode;
 
-  PhoneNumberValueObject(this.phoneNumber, this.countryCode) {
-    _validate();
-  }
+  PhoneNumberValueObject(this.phoneNumber, this.countryCode);
 
-  void _validate() {
-    if (phoneNumber.isEmpty) {
-      throw const FieldIsRequiredFailure('PhoneNumber is required');
-    }
-  }
+
+
 }

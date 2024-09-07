@@ -4,8 +4,11 @@ class SelectDateWidget extends StatefulWidget {
   final void Function(DateTime) onDateSelected;
   final DateTime? selectedDate;
 
-  const SelectDateWidget(
-      {required this.onDateSelected, this.selectedDate, super.key,});
+  const SelectDateWidget({
+    required this.onDateSelected,
+    this.selectedDate,
+    super.key,
+  });
 
   @override
   State<SelectDateWidget> createState() => _SelectDateWidgetState();
@@ -25,10 +28,11 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
 
   @override
   Widget build(final BuildContext context) => OutlinedButton(
-        key: const Key('selectDateButton'),
+        key: const Key('dateOfBirth'),
         onPressed: () async {
           final DateTime? selectedDate = await showDatePicker(
             context: context,
+            confirmText: 'Submit Date',
             initialDate: widget.selectedDate ?? DateTime.now(),
             firstDate: DateTime(1910),
             lastDate: DateTime.now(),

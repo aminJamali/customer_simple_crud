@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 
 import '../../application/utils/utils.dart';
+import '../../domain/validators/mobile_number_validator.dart';
 
 class PhoneNumber extends StatefulWidget {
   final void Function(CountryWithPhoneCode country, String phoneNumber)
@@ -44,7 +45,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
           selectedCountryCode = value;
         }
       });
-      _isPhoneNumberValid=true;
+      _isPhoneNumberValid = true;
     }
     setState(() {});
   }
@@ -84,12 +85,13 @@ class _PhoneNumberState extends State<PhoneNumber> {
             Expanded(
               flex: 4,
               child: TextFormField(
+                key: const Key('mobileNumber'),
                 validator: (final value) {
                   if (value == null || value.isEmpty) {
                     return 'This field is required';
                   }
                   if (!_isPhoneNumberValid) {
-                    return 'Phone number is not valid';
+                    return 'mobile number is not valid';
                   }
 
                   widget.onPhoneNumberChanged.call(

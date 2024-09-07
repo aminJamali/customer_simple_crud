@@ -14,6 +14,17 @@ class LocalDataSource {
   Future<CollectionBox<dynamic>> openCustomerBox() =>
       boxCollection.openBox(customers);
 
+  Future<bool> clearAllCustomers() async {
+    try {
+      final customers = await openCustomerBox();
+
+      await customers.clear();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<Either<ExceptionModel, String>> editCustomer(
     final ModifyCustomerDto modifyCustomerDto,
   ) async {

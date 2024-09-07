@@ -7,14 +7,21 @@ import 'package:path_provider/path_provider.dart';
 import 'application/config/router/router.dart';
 import 'application/config/theme/app_theme.dart';
 import 'application/injection/app_injections.dart';
+import 'package:flutter_driver/driver_extension.dart';
+
 
 void main() async {
+
+  enableFlutterDriverExtension();
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await init();
   await AppInjections.initAppInjections();
   final directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path);
+
+
 
   runApp(const MyApp());
 }

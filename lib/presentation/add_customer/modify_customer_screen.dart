@@ -113,6 +113,7 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
         children: [
           Utils.largeVerticalSpacer,
           TextFormField(
+            key: const Key('firstName'),
             validator: (final value) {
               if (value == null || value.isEmpty) {
                 return 'This field is required';
@@ -126,6 +127,7 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
           ),
           Utils.largeVerticalSpacer,
           TextFormField(
+            key: const Key('lastName'),
             validator: (final value) {
               if (value == null || value.isEmpty) {
                 return 'This field is required';
@@ -139,6 +141,7 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
           ),
           Utils.largeVerticalSpacer,
           TextFormField(
+            key: const Key('bankAccountNumber'),
             validator: (final value) {
               if (value == null || value.isEmpty) {
                 return 'This field is required';
@@ -152,6 +155,7 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
           ),
           Utils.largeVerticalSpacer,
           TextFormField(
+            key: const Key('email'),
             validator: (final value) {
               if (value == null || value.isEmpty) {
                 return 'This field is required';
@@ -189,6 +193,7 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
 
   Widget _submit(BuildContext context, Object? state) => ElevatedButton(
         onPressed: _onSubmit,
+        key: const Key('submit'),
         child: state is ModifyCustomerLoadingState
             ? const CircularProgressIndicator()
             : const Text('Submit'),
@@ -263,7 +268,9 @@ class _ModifyCustomerScreenState<B extends ModifyCustomerBaseBloc>
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Center(
-          child: Text('Successfully Submitted!'),
+          child: Text(
+            'Successfully Submitted!',
+          ),
         ),
       ),
     );
