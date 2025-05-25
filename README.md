@@ -40,3 +40,9 @@ Customer {
 
 - Use [Get It] as dependency injection method.
 
+### State Management
+
+- Use Bloc as the State Management.
+
+
+
