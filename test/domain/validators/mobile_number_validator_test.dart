@@ -12,18 +12,23 @@ void main() {
   test(
     'valid iranian mobile number must return true +98 901 452 3821',
     () async {
-
-      print('before init');
-      await init();
-      final supportedRegions = await getAllSupportedRegions();
-      print(supportedRegions);
-
-
-      print('inside the test');
       final result = await MobileNumberValidator.validatePhoneNumber(
-        phoneNumber: '+989014523821',
+        phoneNumber: '+989121234567',
       );
       expect(result, true);
     },
   );
+
+
+  test(
+    'invalid iranian mobile number must return false +982188776655',
+        () async {
+      final result = await MobileNumberValidator.validatePhoneNumber(
+        phoneNumber: '+982188776655',
+      );
+      expect(result, false);
+    },
+  );
+
+
 }
